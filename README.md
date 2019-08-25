@@ -1,10 +1,12 @@
 [paypal]: https://paypal.me/hexile0
 [apktool]: https://github.com/iBotPeaches/Apktool
 [janus_poc]: https://github.com/V-E-O/PoC/tree/8c389899e6c4e16b2ddab9ba6d77c2696577366f/CVE-2017-13156
+[writeup]: https://www.guardsquare.com/en/blog/new-android-vulnerability-allows-attackers-modify-apps-without-affecting-their-signatures
+[v-e-o]: https://github.com/V-E-O/
 
 # Janus Toolkit
 
-Here's a collection of tools to help you inject custom code in APKs without changing the APK Signature v1.
+This is a collection of tools to help you inject custom code in APKs without changing the APK Signature v1.
 
 This method only works in Android Marshmallow (SDK 23) or below as the exploit Janus \[CVE-2017-13156\] has been fixed by Google in Android Nougat (SDK 24).
 
@@ -19,3 +21,7 @@ TODO: Complete the guide. Extra instructions in [this][janus_poc] repo.
 
 ## Donate
 If this repository helped you in any way, feel free to donate [here][paypal].
+
+## Credits
+
+Credits go to Guardsquare for the [writeup] and to V-E-O for the [PoC][janus_poc].
