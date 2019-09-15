@@ -39,7 +39,7 @@ def generate_file(output_folder, name, tag, template, authority=False):
     folder = os.path.join(output_folder, '/'.join(name.split('.')[:-1]))
     class_name = name.split('.')[-1]
 
-    out = tag % ('.'.join(name.split('.')[:-1]), class_name)
+    out = template % ('.'.join(name.split('.')[:-1]), class_name)
 
     try:
         os.makedirs(folder)
@@ -50,9 +50,9 @@ def generate_file(output_folder, name, tag, template, authority=False):
         f.write(out)
 
     if authority:
-        return template % (name, random_string(3) + '.' + random_string(5))
+        return tag % (name, random_string(3) + '.' + random_string(5))
 
-    return template % name
+    return tag % name
 
 
 def main():
