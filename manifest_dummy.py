@@ -72,7 +72,7 @@ def main():
 
         try:
             os.makedirs(folder)
-        except:
+        except FileExistsError:
             pass
 
         with open(os.path.join(folder, class_name + '.java'), 'w') as f:
@@ -92,7 +92,7 @@ def main():
 
         try:
             os.makedirs(folder)
-        except:
+        except FileExistsError:
             pass
 
         with open(os.path.join(folder, class_name + '.java'), 'w') as f:
