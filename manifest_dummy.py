@@ -22,10 +22,17 @@ import os
 import string
 import random
 
+templates_folder = 'templates'
+
 
 def random_string(length=10):
     dictionary = string.ascii_lowercase
     return ''.join(random.choice(dictionary) for i in range(length))
+
+
+def load_template(file):
+    with open(os.path.join(templates_folder, file)) as f:
+        return f.read()
 
 
 def main():
@@ -38,15 +45,12 @@ def main():
     _, manifest, output = sys.argv
 
     # Load templates
-    with open(os.path.join('templates', 'application_template')) as f:
-        application_template = f.read()
+    application_template = load_template('application')
+    provider_template = load_template('provider')
+    service_template = load_template('service')
+    receiver_template = load_template('receiver')
 
-    with open(os.path.join('templates', 'provider_template')) as f:
-        provider_template = f.read()
-
-    with open(os.path.join('templates', 'service_template')) as f:
-        service_template = f.read()
-
+    # Initialize tags
     manifest_tags = ''
     application_tag = '<application android:name="%s">\n'
     provider_tag = '<provider android:name="%s" android:authorities="%s"/>\n'
