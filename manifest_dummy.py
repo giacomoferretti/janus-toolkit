@@ -35,6 +35,23 @@ def load_template(file):
         return f.read()
 
 
+def generate_file(output_folder, name, tag, template):
+    folder = os.path.join(output_folder, '/'.join(name.split('.')[:-1]))
+    class_name = name.split('.')[-1]
+
+    out = tag % ('.'.join(name.split('.')[:-1]), class_name)
+
+    try:
+        os.makedirs(folder)
+    except FileExistsError:
+        pass
+
+    with open(os.path.join(folder, class_name + '.java'), 'w') as f:
+        f.write(out)
+
+    return template % name
+
+
 def main():
     # Check arguments
     if len(sys.argv) != 3:
@@ -53,58 +70,35 @@ def main():
     # Initialize tags
     manifest_tags = ''
     application_tag = '<application android:name="%s">\n'
-    provider_tag = '<provider android:name="%s" android:authorities="%s"/>\n'
-    service_tag = '<service android:name="%s"/>\n'
+    provider_tag = '\t<provider android:name="%s" android:authorities="%s"/>\n'
+    service_tag = '\t<service android:name="%s"/>\n'
+    receiver_tag = '\t<receiver android:name="%s"/>\n'
 
     # Load XML
     root = ET.parse(manifest).getroot()
 
     # Parse application
-    manifest_tags += application_tag % (
-        root.find('application').get('{http://schemas.android.com/apk/res/android}name'))
+    application_name = root.find('application').get('{http://schemas.android.com/apk/res/android}name')
+    manifest_tags += generate_file(output, application_name, application_tag, application_template)
 
     # Parse providers
-    for providers in root.findall('application/provider'):
-        name = providers.get('{http://schemas.android.com/apk/res/android}name')
-
-        folder = os.path.join(output, '/'.join(name.split('.')[:-1]))
-        class_name = name.split('.')[-1]
-
-        manifest_tags += provider_tag % (name, random_string(3) + '.' + random_string(5))
-
-        out = provider_template % ('.'.join(name.split('.')[:-1]), class_name)
-
-        try:
-            os.makedirs(folder)
-        except FileExistsError:
-            pass
-
-        with open(os.path.join(folder, class_name + '.java'), 'w') as f:
-            f.write(out)
-
+    for x in root.findall('application/provider'):
+        name = x.get('{http://schemas.android.com/apk/res/android}name')
+        manifest_tags += generate_file(output, name, provider_tag, provider_template)
         print('Found provider: {}'.format(name))
 
-    for providers in root.findall('application/service'):
-        name = providers.get('{http://schemas.android.com/apk/res/android}name')
-
-        folder = os.path.join(output, '/'.join(name.split('.')[:-1]))
-        class_name = name.split('.')[-1]
-
-        out = service_template % ('.'.join(name.split('.')[:-1]), class_name)
-
-        manifest_tags += service_tag % name
-
-        try:
-            os.makedirs(folder)
-        except FileExistsError:
-            pass
-
-        with open(os.path.join(folder, class_name + '.java'), 'w') as f:
-            f.write(out)
-
+    for x in root.findall('application/service'):
+        name = x.get('{http://schemas.android.com/apk/res/android}name')
+        manifest_tags += generate_file(output, name, service_tag, service_template)
         print('Found service: {}'.format(name))
 
+    for x in root.findall('application/receiver'):
+        name = x.get('{http://schemas.android.com/apk/res/android}name')
+        manifest_tags += generate_file(output, name, receiver_tag, receiver_template)
+        print('Found receiver: {}'.format(name))
+
     with open(os.path.join(output, 'manifest.xml'), 'w') as f:
+        manifest_tags += '</application>'
         f.write(manifest_tags)
 
     print('Created necessary dummy classes in "{}".'.format(output))
