@@ -1,0 +1,7 @@
+package %s;
+
+import android.app.Application;
+
+public class %s extends Application {
+    // TODO: Dummy class
+}
