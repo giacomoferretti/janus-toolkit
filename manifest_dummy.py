@@ -48,7 +48,7 @@ def main():
         service_template = f.read()
 
     manifest_tags = ''
-    application_tag = 'application android:name="%s">\n'
+    application_tag = '<application android:name="%s">\n'
     provider_tag = '<provider android:name="%s" android:authorities="%s"/>\n'
     service_tag = '<service android:name="%s"/>\n'
 
