@@ -35,7 +35,7 @@ def load_template(file):
         return f.read()
 
 
-def generate_file(output_folder, name, tag, template):
+def generate_file(output_folder, name, tag, template, authority=False):
     folder = os.path.join(output_folder, '/'.join(name.split('.')[:-1]))
     class_name = name.split('.')[-1]
 
@@ -48,6 +48,9 @@ def generate_file(output_folder, name, tag, template):
 
     with open(os.path.join(folder, class_name + '.java'), 'w') as f:
         f.write(out)
+
+    if authority:
+        return template % (name, random_string(3) + '.' + random_string(5))
 
     return template % name
 
@@ -84,7 +87,7 @@ def main():
     # Parse providers
     for x in root.findall('application/provider'):
         name = x.get('{http://schemas.android.com/apk/res/android}name')
-        manifest_tags += generate_file(output, name, provider_tag, provider_template)
+        manifest_tags += generate_file(output, name, provider_tag, provider_template, authority=True)
         print('Found provider: {}'.format(name))
 
     for x in root.findall('application/service'):
