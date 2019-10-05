@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# -*- coding: utf-8 -*-
+
 # Based on https://github.com/V-E-O/PoC/tree/8c389899e6c4e16b2ddab9ba6d77c2696577366f/CVE-2017-13156
 
 import os
