@@ -44,8 +44,8 @@ func updateDexLength(b []byte, length int) []byte {
 }
 
 func writeArray(b []byte, offset int, d []byte) []byte {
-    for i := 0; i < len(d); i++ {
-        b[offset + i] = d[i]
+    for i, v := range d {
+        b[offset + i] = v
     }
     return b
 }
