@@ -115,13 +115,16 @@ func main() {
         pos += tempPos + 46;
     }
 
+    // Merge bytes
     out := append(inputData, inputApk...)
 
+    // Fix checksum for DEX file
     if fixChecksum {
         out = updateDexLength(out, len(out))
         out = updateChecksum(out)
     }
 
+    // Write to file
     f, err := os.Create(outputApkPath)
     checkError(err)
     _, err = f.Write(out)
