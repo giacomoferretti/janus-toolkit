@@ -126,7 +126,8 @@ func main() {
     checkError(err)
     _, err = f.Write(out)
     checkError(err)
-    f.Close()
+    err = f.Close()
+    checkError(err)
 
     fmt.Printf("Successfully generated %s.\n", outputApkPath)
 }
