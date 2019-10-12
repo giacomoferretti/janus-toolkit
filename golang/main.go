@@ -17,15 +17,15 @@
 package main
 
 import (
-    "fmt"
-    "flag"
-    "encoding/hex"
-    "os"
-    "io/ioutil"
-    "bytes"
-    "encoding/binary"
-    "crypto/sha1"
-    "hash/adler32"
+	"bytes"
+	"crypto/sha1"
+	"encoding/binary"
+	"encoding/hex"
+	"flag"
+	"fmt"
+	"hash/adler32"
+	"io/ioutil"
+	"os"
 )
 
 var fixChecksum bool
