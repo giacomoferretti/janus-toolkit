@@ -47,9 +47,8 @@ def main():
     input_data_file = args.input_data
     input_apk_file = args.input_apk
     output_apk_file = args.output_apk
-    verbosity = args.verbosity
-
-    print(args.verbosity)
+    if args.verbosity is not None:
+        verbosity = args.verbosity
 
     # Check if input APK is a ZIP file
     if not zipfile.is_zipfile(input_apk_file):
