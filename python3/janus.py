@@ -7,10 +7,10 @@
 import os
 import sys
 import struct
+import hashlib
 import zipfile
 import argparse
 from zlib import adler32
-from hashlib import sha1
 
 verbosity = 0
 
@@ -22,7 +22,9 @@ def verbose_log(level, message):
 
 def update_checksum(data):
     # Update SHA1 (20 bytes)
-    data[12:32] = sha1.digest(data[32:])
+    m = hashlib.sha1()
+    m.update(data[32:])
+    data[12:32] = m.digest()
 
     # Update Adler32 (8 bytes)
     v = adler32(memoryview(data[12:])) & 0xffffffff
